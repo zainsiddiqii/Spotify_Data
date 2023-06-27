@@ -67,13 +67,17 @@ class BuildDataFrame:
         self.dataframe["time_started"] = self.dataframe["time_ended"] - self.dataframe["stream_duration"]
         print("Created time_started column in datetime format...")
 
-        # clean values in 'platform' column
+        #clean values in 'platform' column
         self.dataframe.loc[self.dataframe["platform"].str.contains("web_player", case=False), "platform"] = "browser"
         self.dataframe.loc[self.dataframe["platform"].str.contains("iOS", case=False), "platform"] = "ios"
         self.dataframe.loc[self.dataframe["platform"].str.contains("Windows", case=False), "platform"] = "windows"
         self.dataframe.loc[self.dataframe["platform"].str.contains("ps4", case=False), "platform"] = "ps4"
         self.dataframe.loc[self.dataframe["platform"].str.contains("tizen", case=False), "platform"] = "tv"
         print("Cleaned values in platform column (e.g iOS 11.0.1 (iPhone9,3) -> ios)...")
+
+        #clean vlues in spotify_track_uri column
+        self.dataframe["spotify_track_uri"] = self.dataframe["spotify_track_uri"].str.split(":", expand = True)[2]
+        print("Cleaned values in spotify_track_uri column (e.g spotify:track:{actual id} -> actual id)...")
 
     def drop_columns(self, columns: list) -> pd.DataFrame:
             """This function will drop the columns that are not needed for the analysis."""
