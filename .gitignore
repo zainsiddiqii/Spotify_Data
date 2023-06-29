@@ -1,3 +1,7 @@
 spotify_data/*.json
 __pycache__
 spotify_data.zip
+spotify_data
+spotifyvenv
+.env
+.cache
