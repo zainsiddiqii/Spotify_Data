@@ -5,3 +5,5 @@ spotify_data
 spotifyvenv
 .env
 .cache
+*png
+*.svg
