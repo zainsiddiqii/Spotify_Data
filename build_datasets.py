@@ -82,6 +82,10 @@ class ExtendedStreamingHistory:
         self.dataframe["spotify_track_uri"] = self.dataframe["spotify_track_uri"].str.split(":", expand = True)[2]
         self.dataframe = self.dataframe[self.dataframe["spotify_track_uri"].notna()]
         print("Cleaned values in spotify_track_uri column (e.g spotify:track:{actual id} -> actual id)...")
+        
+        # drop rows where something was streamed for less than 10 seconds
+        self.dataframe = self.dataframe[self.dataframe["ms_played"] > 999.9 * 10]
+        print("Dropped rows where something was streamed for less than 10 seconds...")
 
     def drop_columns(self, columns: list) -> pd.DataFrame:
         """This function will drop the columns that are not needed for the analysis."""
