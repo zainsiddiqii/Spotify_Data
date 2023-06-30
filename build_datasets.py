@@ -61,13 +61,13 @@ class ExtendedStreamingHistory:
         print("Created time_ended column in datetime format...")
 
         # Convert 'ms_played' column to hh:mm:ss format by creating stream_duration column
-        total_sec = self.dataframe["ms_played"] / 1000
-        self.dataframe["stream_duration"] = total_sec.apply(lambda x: datetime.timedelta(seconds = x))
-        self.dataframe["stream_duration"] = self.dataframe["stream_duration"].astype("timedelta64[s]")
-        print("Created stream_duration column in timedelta format...")
+        self.dataframe["stream_duration"] = self.dataframe["ms_played"] / 1000
+        print("Created stream_duration column in seconds [s] format...")
 
         #create time_started column and convert it to datetime format
-        self.dataframe["time_started"] = self.dataframe["time_ended"] - self.dataframe["stream_duration"]
+        stream_duration = self.dataframe["stream_duration"].apply(lambda x: datetime.timedelta(seconds = x))
+        stream_duration = stream_duration.astype("timedelta64[s]")
+        self.dataframe["time_started"] = self.dataframe["time_ended"] - stream_duration
         print("Created time_started column in datetime format...")
 
         #clean values in 'platform' column
@@ -165,9 +165,8 @@ class AudioFeatures:
         self.dataframe = pd.DataFrame(self.audio_features_data)
         print("Created dataframe from audio features data...")
         total_sec = self.dataframe["duration_ms"] / 1000
-        self.dataframe["song_length"] = total_sec.apply(lambda x: datetime.timedelta(seconds = x))
-        self.dataframe["song_length"] = self.dataframe["song_length"].astype("timedelta64[s]")
-        print("Created song_duration column in timedelta format...")
+        self.dataframe["song_length"] = self.dataframe["duration_ms"] / 1000
+        print("Created song_duration column in seconds [s] format...")
 
         self.dataframe.drop(columns = self.columns_to_drop, inplace = True)
         print(f"Dropped columns {', '.join(self.columns_to_drop)}...")
